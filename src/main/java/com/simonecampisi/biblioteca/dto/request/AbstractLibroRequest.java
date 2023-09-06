@@ -10,5 +10,5 @@ public abstract class AbstractLibroRequest {
 
     private Integer annoProduzione;
 
-    private boolean preso;
+    private boolean isTaken;
 }

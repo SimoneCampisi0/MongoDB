@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LibroRepo extends MongoRepository<Libro, String> {
+    void deleteLibroByTitolo(String nomeLibro);
+
+    Libro findByTitolo(String nomeLibro);
 }

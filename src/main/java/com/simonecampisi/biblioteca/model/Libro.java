@@ -18,5 +18,6 @@ public class Libro {
 
     private Integer annoProduzione;
 
-    private boolean preso;
+    private boolean isTaken;
+
 }

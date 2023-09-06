@@ -25,7 +25,7 @@ public class LibroController {
         return ResponseEntity.status(HttpStatus.OK).body(libroService.rimuoviLibro(nomeLibro));
     }
 
-    @GetMapping("/visualizza-libri")
+    @GetMapping("/visualizza-libri-disponibili")
     public ResponseEntity<?> listaLibri() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(libroService.listaLibri());

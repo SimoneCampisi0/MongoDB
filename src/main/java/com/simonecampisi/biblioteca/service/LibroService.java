@@ -34,6 +34,7 @@ public class LibroService {
     public List<ViewLibroResponse> listaLibri() {
         return libroRepo.findAll().stream()
                 .map(libro -> libroHelper.buildLibroResponse(libro))
+                .filter(l -> !l.isTaken())
                 .toList();
     }
 

@@ -3,7 +3,7 @@ package com.simonecampisi.biblioteca.service;
 import com.simonecampisi.biblioteca.dao.LibroRepo;
 import com.simonecampisi.biblioteca.dto.request.CreateLibroRequest;
 import com.simonecampisi.biblioteca.dto.response.CreateLibroResponse;
-import com.simonecampisi.biblioteca.dto.response.StatoLibroResponse;
+import com.simonecampisi.biblioteca.dto.response.StatoResponse;
 import com.simonecampisi.biblioteca.dto.response.ViewLibroResponse;
 import com.simonecampisi.biblioteca.model.Libro;
 import com.simonecampisi.biblioteca.service.helper.LibroHelper;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 public class LibroService {
@@ -22,13 +21,16 @@ public class LibroService {
     @Autowired
     private LibroHelper libroHelper;
     public CreateLibroResponse aggiungiLibro(CreateLibroRequest request) {
-        Libro l = libroRepo.insert(Libro.builder()
+        if(!Objects.isNull(libroRepo.findByTitolo(request.getTitolo()))) {
+            return null;
+        } else {
+            return libroHelper.buildCreateLibroResponse(libroRepo.save(Libro.builder()
                 .titolo(request.getTitolo())
                 .isTaken(request.isTaken())
                 .annoProduzione(request.getAnnoProduzione())
                 .autore(request.getAutore())
-                .build());
-        return libroHelper.buildCreateLibroResponse(l);
+                .build()));
+        }
     }
 
     public List<ViewLibroResponse> listaLibri() {
@@ -38,41 +40,48 @@ public class LibroService {
                 .toList();
     }
 
-    public StatoLibroResponse rimuoviLibro(String nomeLibro) {
-        StatoLibroResponse statoLibroResponse;
-
+    public StatoResponse rimuoviLibro(String nomeLibro) {
+        StatoResponse statoResponse;
         if (!Objects.isNull(libroRepo.findByTitolo(nomeLibro))) {
             libroRepo.deleteLibroByTitolo(nomeLibro);
-            statoLibroResponse = new StatoLibroResponse(true);
+            statoResponse = new StatoResponse(true);
         } else {
-            statoLibroResponse = new StatoLibroResponse(false);
+            statoResponse = new StatoResponse(false);
         }
-        return statoLibroResponse;
+        return statoResponse;
     }
 
-    public StatoLibroResponse richiediLibro(String nomeLibro) {
+    public StatoResponse richiediLibro(String nomeLibro) {
         Libro l = libroRepo.findByTitolo(nomeLibro);
-        StatoLibroResponse statoLibroResponse;
-        if(l.isTaken()) {
-            statoLibroResponse = new StatoLibroResponse(false);
+        StatoResponse statoResponse;
+        if(!Objects.isNull(l)) {
+            if(l.isTaken())  {
+                statoResponse = new StatoResponse(false);
+            } else {
+                l.setTaken(true);
+                libroRepo.save(l);
+                statoResponse = new StatoResponse(true);
+            }
         } else {
-            l.setTaken(true);
-            libroRepo.save(l);
-            statoLibroResponse = new StatoLibroResponse(true);
+            statoResponse = new StatoResponse(false);
         }
-        return statoLibroResponse;
+        return statoResponse;
     }
 
-    public StatoLibroResponse restituisciLibro(String nomeLibro) {
+    public StatoResponse restituisciLibro(String nomeLibro) {
         Libro l = libroRepo.findByTitolo(nomeLibro);
-        StatoLibroResponse statoLibroResponse;
-        if(l.isTaken()) {
-            l.setTaken(false);
-            libroRepo.save(l);
-            statoLibroResponse = new StatoLibroResponse(true);
+        StatoResponse statoResponse;
+        if(!Objects.isNull(l)) {
+            if(l.isTaken()) {
+                l.setTaken(false);
+                libroRepo.save(l);
+                statoResponse = new StatoResponse(true);
+            } else {
+                statoResponse = new StatoResponse(false);
+            }
         } else {
-            statoLibroResponse = new StatoLibroResponse(false);
+            statoResponse = new StatoResponse(false);
         }
-        return statoLibroResponse;
+        return statoResponse;
     }
 }

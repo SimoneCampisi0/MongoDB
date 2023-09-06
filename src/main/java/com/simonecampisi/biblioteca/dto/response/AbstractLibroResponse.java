@@ -1,7 +1,6 @@
 package com.simonecampisi.biblioteca.dto.response;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,5 +16,4 @@ public abstract class AbstractLibroResponse {
 
     private Integer annoProduzione;
 
-    private boolean isTaken;
 }

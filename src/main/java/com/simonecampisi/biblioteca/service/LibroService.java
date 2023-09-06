@@ -26,7 +26,7 @@ public class LibroService {
         } else {
             return libroHelper.buildCreateLibroResponse(libroRepo.save(Libro.builder()
                 .titolo(request.getTitolo())
-                .isTaken(request.isTaken())
+                .isTaken(false)
                 .annoProduzione(request.getAnnoProduzione())
                 .autore(request.getAutore())
                 .build()));
@@ -35,8 +35,8 @@ public class LibroService {
 
     public List<ViewLibroResponse> listaLibri() {
         return libroRepo.findAll().stream()
-                .map(libro -> libroHelper.buildLibroResponse(libro))
                 .filter(l -> !l.isTaken())
+                .map(libro -> libroHelper.buildLibroResponse(libro))
                 .toList();
     }
 

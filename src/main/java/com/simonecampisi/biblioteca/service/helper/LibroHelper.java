@@ -13,7 +13,6 @@ public class LibroHelper {
         viewLibroResponse.setTitolo(l.getTitolo());
         viewLibroResponse.setAutore(l.getAutore());
         viewLibroResponse.setAnnoProduzione(l.getAnnoProduzione());
-        viewLibroResponse.setTaken(l.isTaken());
         return viewLibroResponse;
     }
 
@@ -23,7 +22,6 @@ public class LibroHelper {
         response.setTitolo(l.getTitolo());
         response.setAutore(l.getAutore());
         response.setAnnoProduzione(l.getAnnoProduzione());
-        response.setTaken(l.isTaken());
         return response;
     }
 }

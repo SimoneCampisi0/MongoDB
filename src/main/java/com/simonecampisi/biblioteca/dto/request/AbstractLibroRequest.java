@@ -9,6 +9,4 @@ public abstract class AbstractLibroRequest {
     private String autore;
 
     private Integer annoProduzione;
-
-    private boolean isTaken;
 }
